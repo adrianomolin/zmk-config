@@ -9,6 +9,45 @@
 #include <dt-bindings/zmk/keys.h>
 
 / {
+    macros {
+        lm_one_hyper: lm_one_hyper {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press>,
+                <&mo 1>,
+                <&macro_press>,
+                <&kp>,
+                <&macro_pause_for_release>,
+                <&macro_release>,
+                <&kp>,
+                <&macro_release>,
+                <&mo 1>;
+
+            label = "LM_ONE_HYPER";
+        };
+    };
+
+    behaviors {
+        skq: sticky_key_quick_release {
+            compatible = "zmk,behavior-sticky-key";
+            bindings = <&kp>;
+            #binding-cells = <1>;
+            release-after-ms = <1000>;
+            quick-release;
+            ignore-modifiers;
+        };
+
+        lht: leftshift_hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            bindings = <&kp>, <&skq>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "tap-preferred";
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -20,10 +59,10 @@
             //                    | GUI | LWR | SPC |   | ENT | RSE  | ALT |
 
             bindings = <
-&kp TAB    &kp Q  &kp W  &kp E         &kp R  &kp T        &kp Y      &kp U         &kp I      &kp O    &kp P     &kp BSPC
-&kp LCTRL  &kp A  &kp S  &kp D         &kp F  &kp G        &kp H      &kp J         &kp K      &kp L    &kp SEMI  &kp SQT
-&kp LSHFT  &kp Z  &kp X  &kp C         &kp V  &kp B        &kp N      &kp M         &kp COMMA  &kp DOT  &kp FSLH  &kp LCTRL
-                         &kp LEFT_ALT  &mo 2  &kp ENTER    &kp SPACE  &lt 1 ESCAPE  &kp LCMD
+&kp TAB           &kp Q  &kp W  &kp E         &kp R  &kp T        &kp Y      &kp U         &kp I      &kp O    &kp P     &kp BSPC
+&kp LCTRL         &kp A  &kp S  &kp D         &kp F  &kp G        &kp H      &kp J         &kp K      &kp L    &kp SEMI  &kp SQT
+&lht LSHFT LSHFT  &kp Z  &kp X  &kp C         &kp V  &kp B        &kp N      &kp M         &kp COMMA  &kp DOT  &kp FSLH  &lm_one_hyper
+                                &kp LEFT_ALT  &mo 2  &kp ENTER    &kp SPACE  &lt 1 ESCAPE  &kp LCMD
             >;
         };
 
@@ -50,10 +89,10 @@
             //                    | GUI |     | SPC |   | ENT |     | ALT |
 
             bindings = <
-&kp LC(GRAVE)  &kp EXCL   &kp AT     &kp HASH      &kp DLLR       &kp PRCNT    &kp CARET  &kp AMPS   &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp GRAVE  &kp BSPC
-&kp LG(V)      &trans     &kp MINUS  &kp PLUS      &kp EQUAL      &kp HASH     &kp UNDER  &kp EQUAL  &kp LEFT_BRACE        &kp RIGHT_BRACE        &kp SLASH  &kp DOT
-&kp LG(C)      &kp LG(X)  &trans     &kp ASTERISK  &kp BACKSLASH  &kp PIPE     &kp TILDE  &kp PLUS   &kp LEFT_BRACKET      &kp RIGHT_BRACKET      &kp AT     &trans
-                                     &kp LEFT_ALT  &kp ESCAPE     &kp ENTER    &kp SPACE  &mo 1      &kp LEFT_GUI
+&kp LC(GRAVE)  &kp EXCL   &kp AT     &kp HASH      &kp DLLR       &kp PRCNT    &kp CARET  &kp AMPS           &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp GRAVE  &kp BSPC
+&kp LG(V)      &trans     &kp MINUS  &kp PLUS      &kp EQUAL      &kp HASH     &kp UNDER  &kp COLON          &kp LEFT_BRACE        &kp RIGHT_BRACE        &kp SLASH  &kp DOT
+&kp LG(C)      &kp LG(X)  &trans     &kp ASTERISK  &kp BACKSLASH  &kp PIPE     &kp TILDE  &kp DOUBLE_QUOTES  &kp LEFT_BRACKET      &kp RIGHT_BRACKET      &kp AT     &trans
+                                     &kp LEFT_ALT  &kp ESCAPE     &kp ENTER    &kp SPACE  &mo 1              &kp LEFT_GUI
             >;
         };
 
